@@ -103,7 +103,7 @@
 DROP TABLE IF EXISTS actors;
 DROP TABLE IF EXISTS movies;
 DROP TABLE IF EXISTS studios;
-DROP TABLE IF EXISTS cast;
+DROP TABLE IF EXISTS TopCast;
 -- TODO!
 
 -- Create new tables, according to your domain model
@@ -122,21 +122,57 @@ CREATE TABLE movies (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   title TEXT,
   year TEXT,
-  MPAA_rating TEXT,
-  studio_id INTEGER,
+  rating TEXT,
+  studios_id INTEGER,
   actor_id INTEGER
 );
 
-CREATE TABLE cast (
+CREATE TABLE TopCast (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   movie_id INTEGER,
   actor_id INTEGER,
-  character TEXT
+  name TEXT
 );
 -- TODO!
 
 -- Insert data into your database that reflects the sample data shown above
 -- Use hard-coded foreign key IDs when necessary
+INSERT INTO actors (first_name,last_name) VALUES ("Christian","Bale");
+INSERT INTO actors (first_name,last_name) VALUES ("Michael","Caine");
+INSERT INTO actors (first_name,last_name) VALUES ("Liam","Neeson");
+INSERT INTO actors (first_name,last_name) VALUES ("Katie","Holmes");
+INSERT INTO actors (first_name,last_name) VALUES ("Gary","Oldman");
+INSERT INTO actors (first_name,last_name) VALUES ("Heath","Ledger");
+INSERT INTO actors (first_name,last_name) VALUES ("Aaron","Eckhart");
+INSERT INTO actors (first_name,last_name) VALUES ("Michael","Caine");
+INSERT INTO actors (first_name,last_name) VALUES ("Maggie","Gyllenhaal");
+INSERT INTO actors (first_name,last_name) VALUES ("Tom","Hardy");
+INSERT INTO actors (first_name,last_name) VALUES ("Joseph","Gordon-Levitt");
+INSERT INTO actors (first_name,last_name) VALUES ("Anne","Hathaway");
+
+INSERT INTO movies (title,year,rating,studios_id) VALUES ("Batman Begins","2005","PG-13", (SELECT id FROM studios WHERE name = "Warner Bros."));
+INSERT INTO movies (title,year,rating,studios_id) VALUES ("The Dark Knight","2008","PG-13", (SELECT id FROM studios WHERE name = "Warner Bros."));
+INSERT INTO movies (title,year,rating,studios_id) VALUES ("The Dark Knight Rises","2012","PG-13", (SELECT id FROM studios WHERE name = "Warner Bros."));
+
+INSERT INTO studios (name) VALUES ("Warner Bros.");
+
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "Batman Begins"),(SELECT id from actors WHERE last_name = "Bale"),"Bruce Wayne");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "Batman Begins"),(SELECT id from actors WHERE last_name = "Cain"),"Alfred");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "Batman Begins"),(SELECT id from actors WHERE last_name = "Neeson"),"Ra's Al Ghul");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "Batman Begins"),(SELECT id from actors WHERE last_name = "Holmes"),"Rachel Dawes");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "Batman Begins"),(SELECT id from actors WHERE last_name = "Oldman"),"Commissioner Gordon");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight"),(SELECT id from actors WHERE last_name = "Bale"),"Bruce Wayne");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight"),(SELECT id from actors WHERE last_name = "Ledger"),"Joker");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight"),(SELECT id from actors WHERE last_name = "Eckhart"),"Harvey Dent");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight"),(SELECT id from actors WHERE last_name = "Caine"),"Alfred");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight"),(SELECT id from actors WHERE last_name = "Gyllenhaal"),"Rachel Dawes");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight Rises"),(SELECT id from actors WHERE last_name = "Bale"),"Bruce Wayne");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight Rises"),(SELECT id from actors WHERE last_name = "Oldman"),"Commissioner Gordon");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight Rises"),(SELECT id from actors WHERE last_name = "Hardy"),"Bane");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight Rises"),(SELECT id from actors WHERE last_name = "Gordon-Levitt"),"John Blake");
+INSERT INTO TopCast (movie_id,actor_id,name) VALUES ((SELECT id from movies WHERE title = "The Dark Knight Rises"),(SELECT id from actors WHERE last_name = "Hathaway"),"Selina Kyle");
+
+
 -- TODO!
 
 -- Prints a header for the movies output
@@ -145,6 +181,10 @@ CREATE TABLE cast (
 .print ""
 
 -- The SQL statement for the movies output
+SELECT movies.title, movies.year, movies.rating, studios.name
+FROM movies 
+INNER JOIN studios ON movies.studios_id = studios.id;
+
 -- TODO!
 
 -- Prints a header for the cast output
@@ -155,4 +195,5 @@ CREATE TABLE cast (
 
 
 -- The SQL statement for the cast output
+
 -- TODO!
